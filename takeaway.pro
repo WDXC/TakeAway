@@ -31,7 +31,8 @@ SOURCES += \
         $$PWD/Http/HttpContext.cpp \
         $$PWD/Http/HttpResponse.cpp \
         $$PWD/Http/HttpServer.cpp \
-        $$PWD/Http/HttpDataHandle.cpp
+        $$PWD/Http/HttpDataHandle.cpp \
+        $$PWD/Http/HttpCallback.cpp
 
 
 LIBS += $$PWD/lib/libNet.a -lpthread -lmysqlclient

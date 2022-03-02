@@ -11,32 +11,17 @@ public:
     using Task = std::function<void(Json::CJsonData&)>;
 
 public:
-    HttpCallback() : maptable() {}
-    ~HttpCallback() {}
+    HttpCallback();
+    ~HttpCallback();
 
-    void init() {
-        maptable["add"] = Add_;
-        maptable["mul"] = Mul_;
-    }
-
-    void HandleKeyWord(std::string& type,Json::CJsonData& json_data) {
-        std::map<std::string, Task>::const_iterator iter = maptable.find(type);
-        if (maptable.end() == iter) {
-            LOG_ERROR("Search key word error!");
-            return;
-        }
-        Task res = iter->second;
-        res(json_data);
-    }
+    // 初始化接口驱动表 -> 初始化maptable
+    void init();
+    // 根据传入的类型，选择不同的回调函数进行处理
+    void HandleKeyWord(std::string& type,Json::CJsonData& json_data);
 
     /* 测试数据 */
-    void setAddCallback(const Task& cb) {
-        Add_ = cb;
-    }
-
-    void setMuiCallback(const Task& cb) {
-        Mul_ = cb;
-    }
+    void setAddCallback(const Task& cb);
+    void setMuiCallback(const Task& cb);
 
 private:
     Task Add_;

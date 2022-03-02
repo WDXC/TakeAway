@@ -15,6 +15,7 @@ class HttpRequest {
             kPost,
             kHead,
             kPut,
+            kOptions,
             kDelete
         };
         enum Version {
@@ -49,6 +50,8 @@ class HttpRequest {
                 method_ = kPut;
             } else if (m == "DELETE") {
                 method_ = kDelete;
+            } else if (m == "OPTIONS") {
+                method_ = kOptions;
             }
 
             return method_ != kInvalid;
@@ -75,6 +78,9 @@ class HttpRequest {
                     break;
                 case kDelete:
                     res = "DELETE";
+                    break;
+                case kOptions:
+                    res = "OPTIONS";
                     break;
             }
             return res;

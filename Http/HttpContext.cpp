@@ -9,6 +9,8 @@ bool HttpContext::processRequestLine(const char* begin, const char* end) {
   bool successed = false;
   const char* start = begin;
   const char* space = std::find(start, end, ' ');
+  request_.setMethod(start, space);
+  const std::string res = request_.methodString();
   if (space != end && request_.setMethod(start, space)) {
     start = space + 1;
     space = std::find(start, end, ' ');
