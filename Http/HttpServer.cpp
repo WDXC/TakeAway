@@ -11,7 +11,7 @@ void defaultHttpCallback(const HttpRequest&, HttpResponse* resp) {
 HttpServer::HttpServer(EventLoop* loop,
                        const InetAddress& listAddr,
                        const std::string& name,
-                       TcpServer::Option option) :
+                       TcpServer::Option option ) :
     server_(loop, listAddr, name, option),
     httpCallback_(defaultHttpCallback) {
     server_.setConnectionCallback(std::bind(

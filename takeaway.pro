@@ -10,7 +10,6 @@ CONFIG -= app_bundle
 INCLUDEPATH += \
                $$PWD/include/Netlib/Base \
                $$PWD/include/Netlib/Log \
-               $$PWD/include/Netlib/Mysql \
                $$PWD/include/Netlib/Net \
                $$PWD/include/Netlib/rapidjson \
                $$PWD/include/Netlib/Socket \
@@ -23,16 +22,25 @@ HEADERS += \
          $$PWD/Http/HttpServer.hpp \
          $$PWD/Http/HttpContext.hpp \
          $$PWD/Http/HttpDataHandle.hpp \
-         $$PWD/Http/HttpCallback.hpp
+         $$PWD/Http/HttpCallback.hpp \
+         $$PWD/Sql/SqlUserData.hpp \
+         $$PWD/Sql/SqlConnPool.hpp \
+         $$PWD/Sql/SqlHandler.hpp \
+         $$PWD/Sql/SqlOps.hpp
 
 
 SOURCES += \
-        main.cpp \
+        sql_main.cpp \
+        http_main.cpp \
         $$PWD/Http/HttpContext.cpp \
         $$PWD/Http/HttpResponse.cpp \
         $$PWD/Http/HttpServer.cpp \
         $$PWD/Http/HttpDataHandle.cpp \
-        $$PWD/Http/HttpCallback.cpp
+        $$PWD/Http/HttpCallback.cpp \
+        $$PWD/Sql/SqlUserData.cpp \
+        $$PWD/Sql/SqlConnPool.cpp \
+        $$PWD/Sql/SqlHandler.cpp \
+        $$PWD/Sql/SqlOps.cpp
 
 
 LIBS += $$PWD/lib/libNet.a -lpthread -lmysqlclient

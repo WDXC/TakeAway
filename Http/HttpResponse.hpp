@@ -3,6 +3,7 @@
 
 #include <map>
 #include "Http/HttpDataHandle.hpp"
+#include <Sql/SqlHandler.hpp>
 #include <memory>
 
 class Buffer;
@@ -17,11 +18,10 @@ class HttpResponse  {
             k404NotFound = 404,
         };
 
-        explicit HttpResponse(bool close) : 
+        explicit HttpResponse(bool close) :
             statusCode_(kUnknown),
             closeConnection_(close),
             obj(new HttpDataHandle()){
-
         }
 
         void setStatusCode(HttpStatusCode code) {

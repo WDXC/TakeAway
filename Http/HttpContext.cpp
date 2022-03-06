@@ -42,15 +42,10 @@ bool HttpContext::processRequestLine(const char* begin, const char* end) {
 bool HttpContext::parseRequest(Buffer* m_buf, TimeStamp recetime) {
   bool ok = true;
   bool hasMore = true;
-	char* method = nullptr;
   while (hasMore) {
         // 判断传入的http request是否正确
     if (contextState_ == kExpectRequestLine) {
       const char* crlf = m_buf->findCRLF();
-			if (method == nullptr) {
-                // 判断是否为get类型
-				method = strstr(const_cast<char*>(m_buf->peek()), "GET");
-			}
       if (crlf) {
         ok = processRequestLine(m_buf->peek(), crlf);
         if (ok) {
@@ -73,7 +68,8 @@ bool HttpContext::parseRequest(Buffer* m_buf, TimeStamp recetime) {
         } else {
           char* curly_brackes = strstr(const_cast<char*>(crlf), "{");
           // 若不是get类型，且有json数据，则将context_置位为kExpectBody;
-          if (curly_brackes && !method) {
+          std::string method = request_.methodString();
+          if (curly_brackes && method == "POST") {
             contextState_ = kExpectBody;
           } else {
             contextState_ = kGotAll;
@@ -87,6 +83,7 @@ bool HttpContext::parseRequest(Buffer* m_buf, TimeStamp recetime) {
       // 判断数据是否正确
     } else if (contextState_ == kExpectBody) {
       if (!request_.setRequestBody(m_buf->peek())) {
+            std::string res = m_buf->peek();
         hasMore = false;
       } else {
         std::string str = m_buf->peek();

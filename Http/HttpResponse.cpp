@@ -9,7 +9,7 @@ void HttpResponse::appendToBuffer(Buffer* output) const {
     output->append("\r\n");
 
     if (closeConnection_) {
-        output->append("Connection: closer\r\n");
+        output->append("Connection: close\r\n");
     } else {
         snprintf(buf, sizeof(buf), "Content-Length: %zd\r\n", body_.size());
         output->append(buf);

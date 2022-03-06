@@ -8,7 +8,7 @@
 
 class HttpCallback {
 public:
-    using Task = std::function<void(Json::CJsonData&)>;
+    using Task = std::function<void(const std::string& type, Json::CJsonData&)>;
 
 public:
     HttpCallback();
@@ -16,16 +16,16 @@ public:
 
     // 初始化接口驱动表 -> 初始化maptable
     void init();
-    // 根据传入的类型，选择不同的回调函数进行处理
-    void HandleKeyWord(std::string& type,Json::CJsonData& json_data);
 
-    /* 测试数据 */
-    void setAddCallback(const Task& cb);
-    void setMuiCallback(const Task& cb);
+    // 根据传入的类型，选择不同的回调函数进行处理
+    void HandleKeyWord(std::string& type,Json::CJsonData& msg_Body);
+
+    // 登陆回调
+    void setLoginCallback(const Task& cb);
+
 
 private:
-    Task Add_;
-    Task Mul_;
+    Task LOGIN_;
     std::map<std::string, Task> maptable;
 };
 

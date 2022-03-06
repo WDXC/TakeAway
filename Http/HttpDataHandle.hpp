@@ -4,6 +4,7 @@
 
 #include "Json_data.hpp"
 #include "Http/HttpCallback.hpp"
+#include "Sql/SqlHandler.hpp"
 #include "Log.hpp"
 #include <memory>
 
@@ -13,15 +14,22 @@ public:
     ~HttpDataHandle();
 
 public:
-    void messageProc(Json::CJsonData& json_data);
+    void messageProc(Json::CJsonData& msg_Body);
 
 private:
-    /* 测试数据 */
-    void handleAdd(Json::CJsonData& json_data);
-    void handleMul(Json::CJsonData& json_data);
+
+    // 推送到前端
+    void PushToWeb(const std::string& type, Json::CJsonData& msg);
+
+    // 登陆数据处理
+    void handleLogin(const std::string &type, Json::CJsonData& msg_Body);
+
 
 private:
+
     std::unique_ptr<HttpCallback> obj;
+    std::unique_ptr<SqlConnPool> connpool_;
+    std::unique_ptr<SqlHandler> sql_obj;
 };
 
 
