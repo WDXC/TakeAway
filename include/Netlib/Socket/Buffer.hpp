@@ -1,10 +1,12 @@
 #ifndef BUFFER_H_
 #define BUFFER_H_
 
+// 缓冲区设计
 
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <assert.h>
 #include "../Base/NonCopyable.hpp"
 
 class Buffer : NoCopyable {
@@ -33,6 +35,7 @@ class Buffer : NoCopyable {
         
         // 缓冲区偏移
         void retrieve(size_t len) {
+            assert(len <= readable_bytes());
             // 读取部分
             if (len < readable_bytes()) {
                 read_index_ += len;
@@ -43,7 +46,8 @@ class Buffer : NoCopyable {
         
         // 缓冲区复位
         void retrieve_all() {
-            read_index_ = write_index_ = k_cheap_prepend;
+            read_index_ = k_cheap_prepend;
+            write_index_ = k_cheap_prepend;
         }
 
         // 读取所有信息
@@ -53,12 +57,15 @@ class Buffer : NoCopyable {
 
         // 读取len长度数据
         std::string retrieve_as_string(size_t len) {
+            assert(len <= readable_bytes());
             std::string res(peek(), len);
             retrieve(len); // 完成读操作后，复位缓冲区
             return res;
         }
 
         void retrieveUntil(const char* end) {
+            assert(peek() <= end);
+            assert(end <= begin_write());
             retrieve(end-peek());
         }
 
@@ -115,11 +122,13 @@ class Buffer : NoCopyable {
             if (writable_bytes() + prependable_bytes() < len + k_cheap_prepend) {
                 buffer_.resize(write_index_ + len);
             } else {
+                assert(k_cheap_prepend < read_index_);
                 size_t readable = readable_bytes();
                 std::copy(begin() + read_index_, begin() + write_index_, begin() + k_cheap_prepend);
                 
                 read_index_ = k_cheap_prepend;
                 write_index_ = read_index_ + readable;
+                assert(readable == readable_bytes());
             }
         }
 

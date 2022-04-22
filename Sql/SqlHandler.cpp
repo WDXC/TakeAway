@@ -1,47 +1,53 @@
 #include "SqlHandler.hpp"
 
-SqlHandler::SqlHandler(std::unique_ptr<SqlConnPool> connpool) :
-    m_sql(std::make_unique<SqlOps>()){
+SqlHandler::SqlHandler(SqlConnPool* connpool)
+{
     if (connpool) {
         m_sql = connpool->getConnObj();
-        m_connpool = std::move(connpool);
-        m_userdata = std::make_unique<SqlUserData>(std::move(m_sql));
+        m_connpool = connpool;
+        m_userdata = new SqlUserData(m_sql);
     }
 }
 
-SqlHandler::SqlHandler(std::unique_ptr<SqlOps> sql, std::unique_ptr<SqlConnPool> connpool) :
-    m_sql(std::make_unique<SqlOps>())
+SqlHandler::SqlHandler(SqlOps **sql, SqlConnPool *connpool)
 {
     if (connpool) {
-        sql = connpool->getConnObj();
-        m_sql = std::move(sql);
-        m_userdata = std::make_unique<SqlUserData>(std::move(m_sql));
-        m_connpool = std::move(connpool);
+        *sql = connpool->getConnObj();
+        m_sql = *sql;
+        m_userdata = new SqlUserData(m_sql);
+        m_connpool = connpool;
     }
+}
+
+SqlHandler::SqlHandler(SqlHandler *obj)
+{
+    m_sql = obj->m_sql;
+    m_userdata = obj->m_userdata;
+    m_connpool = obj->m_connpool;
 }
 
 SqlHandler::~SqlHandler() {
     if (m_sql) {
-        m_connpool->FreeConnObj(std::move(m_sql));
+        m_connpool->FreeConnObj(m_sql);
     }
 }
 
-bool SqlHandler::dealInsert()
+bool SqlHandler::userInsert(const std::string &mail, const std::string &pwd)
 {
-    return m_userdata->handleInsert("aa", "bb");
+    return m_userdata->handleInsert(mail, pwd);
 }
 
 
-bool SqlHandler::dealUpdate() {
-    return m_userdata->handleUpdate("root123", "2342");
+bool SqlHandler::userUpdate(const std::string& mail, const std::string &pwd) {
+    return m_userdata->handleUpdate(mail, pwd);
 }
 
-std::string SqlHandler::dealQuery(const std::string &pwd)
+std::string SqlHandler::userQuery(const std::string &email)
 {
-    return m_userdata->handleQuery(pwd);
+    return m_userdata->handleQuery(email);
 }
 
-bool SqlHandler::dealDel()
+bool SqlHandler::userDel(const std::string mail)
 {
-    return m_userdata->handleDel("44r");
+    return m_userdata->handleDel(mail);
 }

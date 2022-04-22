@@ -9,6 +9,7 @@
 class SqlOps {
 public:
     SqlOps();
+    SqlOps(SqlOps*);
     ~SqlOps();
 
     bool connect(const char* ip, int port, const char* username, const char* password, const char* db_name);

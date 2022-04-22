@@ -1,11 +1,9 @@
 #include "Http/HttpDataHandle.hpp"
 
-HttpDataHandle::HttpDataHandle() :
+HttpDataHandle::HttpDataHandle(SqlHandler &sql_handler) :
     obj(new HttpCallback())
 {
-    connpool_ = std::make_unique<SqlConnPool>(g_sqlMgr::instance());
-    connpool_->Init("127.0.0.1", 3306, "root", "password", "TakeAway", 100);
-    sql_obj = std::make_unique<SqlHandler>(std::move(connpool_));
+    sql_obj = std::make_unique<SqlHandler>(sql_handler);
     // 登陆接口
     obj->setLoginCallback(std::bind(&HttpDataHandle::handleLogin, this, std::placeholders::_1,
                                     std::placeholders::_2));
@@ -13,7 +11,6 @@ HttpDataHandle::HttpDataHandle() :
 
 HttpDataHandle::~HttpDataHandle()
 {
-
 }
 
 void HttpDataHandle::messageProc(Json::CJsonData& msg)
@@ -71,9 +68,8 @@ void HttpDataHandle::handleLogin(const std::string& type, Json::CJsonData &msg_b
         LOG_ERROR("dctor email json failed!");
         return;
     }
-
     std::string statusCode_;
-    if (!sql_obj->dealQuery(email).compare(password)) {
+    if (!sql_obj->userQuery(email).compare(password)) {
         statusCode_ = "true";
     } else {
         statusCode_ = "false";

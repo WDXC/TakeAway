@@ -1,6 +1,8 @@
 #ifndef TCPCONNECTION_H_
 #define TCPCONNECTION_H_
 
+// 用于接收来自client的tcp 连接
+
 #include <string>
 #include <atomic>
 #include <memory>
@@ -67,6 +69,11 @@ class TcpConnection : NoCopyable,
         // 销毁连接
         void destory_connect();
 
+        // 强制关闭
+        void forceClose();
+        void forceCloseWithDelay(double seconds);
+        void setTcpNoDelay(bool on);
+
         // 设置回调
         void setCloseCallback(const CloseCallback& cb) {
             closeCallback_ = cb;
@@ -93,9 +100,17 @@ class TcpConnection : NoCopyable,
             return context_;
         }
 
+        bool isReading() const {return reading_;}
+
 				boost::any* getMutableContext() {
             return &context_;
         }
+
+        void startRead();
+        void startReadInLoop();
+
+        void stopRead();
+        void stopReadInLoop();
 
     private:
         void handle_read(TimeStamp receive_time);
@@ -106,6 +121,7 @@ class TcpConnection : NoCopyable,
         void send_inLoop(const std::string& buf);
         void send_inLoop(const std::string& buf, size_t len);
         void shutdown_inLoop();
+        void forceCloseInLoop();
 
     private:
         EventLoop* loop_;
@@ -130,7 +146,7 @@ class TcpConnection : NoCopyable,
 
         Buffer input_buffer_;
         Buffer output_buffer_;
-				boost::any context_;
+		boost::any context_;
 };
 
 #endif

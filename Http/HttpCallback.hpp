@@ -22,10 +22,13 @@ public:
 
     // 登陆回调
     void setLoginCallback(const Task& cb);
+    // 发送验证码邮件
+    void setMailCallback(const Task& cb);
 
 
 private:
     Task LOGIN_;
+    Task MAIL_;
     std::map<std::string, Task> maptable;
 };
 

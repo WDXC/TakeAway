@@ -12,7 +12,6 @@
 class SqlConnPool {
     public:
         SqlConnPool();
-        explicit SqlConnPool(SqlConnPool*);
         ~SqlConnPool();
 
         // 初始化数据库连接的相关数据
@@ -24,16 +23,16 @@ class SqlConnPool {
         void ClosePool();
 
         // 获取连接池中的对象
-        std::unique_ptr<SqlOps> getConnObj();
+        SqlOps* getConnObj();
         // 释放连接对象
-        void FreeConnObj(std::unique_ptr<SqlOps> conn);
+        void FreeConnObj(SqlOps* conn);
 
     private:
-        void DestoryConnection(std::unique_ptr<SqlOps> conn);
+        void DestoryConnection(SqlOps* conn);
 
 
     private:
-        std::queue<std::unique_ptr<SqlOps>> m_connQue;
+        std::queue<SqlOps*> m_connQue;
         int m_max_conn;
         std::mutex m_mutex;
 };

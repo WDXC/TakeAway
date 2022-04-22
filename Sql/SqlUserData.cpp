@@ -1,9 +1,9 @@
 #include "SqlUserData.hpp"
 
 
-SqlUserData::SqlUserData(std::unique_ptr<SqlOps> ops) :
-    m_sql(std::move(ops)) {
-
+SqlUserData::SqlUserData(SqlOps* ops)
+{
+    m_sql = std::shared_ptr<SqlOps>(ops);
 }
 
 SqlUserData::~SqlUserData()

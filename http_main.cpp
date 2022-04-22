@@ -34,6 +34,7 @@ void onRequest(const HttpRequest& req, HttpResponse* resp) {
 //        resp->addHeader("Cache-Control", "no-cache");
         resp->setContentType("*/*");
     } else if (req.GetPath() == "/api") {
+        resp->setStatusCode(HttpResponse::k200Ok);
         resp->setContentType("*/*");
         resp->addHeader("Server", "Zty");
         resp->addHeader("Access-Control-Allow-Origin", "*");
@@ -69,12 +70,17 @@ void onRequest(const HttpRequest& req, HttpResponse* resp) {
     }
 }
 
-int main(int argc, char* argv[]) {
+int main() {
     g_LogMgr::instance()->init("./log", 5000000, 1000);
+    SqlConnPool* obj = g_sqlMgr::instance();
+    if (!obj->Init("127.0.0.1", 3306, "root", "password", "TakeAway", 10)) {
+        return -1;
+    }
+    SqlHandler* sql_obj = new SqlHandler(obj);
     EventLoop loop;
-    HttpServer server(&loop, InetAddress(8000), "dummy");
+    HttpServer server(&loop, InetAddress(8000), "dummy", *sql_obj);
     server.setHttpCallback(onRequest);
-    server.setThreadNum(8); // 与CPU核心数相同
+    server.setThreadNum(3); // 与CPU核心数相同
     server.start();
     loop.loop();
 }

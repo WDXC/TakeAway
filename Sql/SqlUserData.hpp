@@ -8,7 +8,7 @@
 
 class SqlUserData {
 public:
-    SqlUserData(std::unique_ptr<SqlOps> ops);
+    SqlUserData(SqlOps* ops);
     ~SqlUserData();
 
     bool handleInsert(const std::string& mail, const std::string& pwd);
@@ -17,7 +17,7 @@ public:
     bool handleDel(const std::string& mail);
 
 private:
-    std::unique_ptr<SqlOps> m_sql;
+    std::shared_ptr<SqlOps> m_sql;
 };
 
 

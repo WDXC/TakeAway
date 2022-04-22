@@ -1,24 +1,42 @@
 #ifndef CURRENTTHREAD_H_
 #define CURRENTTHREAD_H_
 
+#include <stdint.h>
+#include <string>
 
-#include <unistd.h>
-#include <sys/syscall.h>
-
-namespace CurrentThread
-{
+namespace CurrentThread {
     extern __thread int t_cachedTid;
+    extern __thread char t_tidString[32];
+    extern __thread int t_tidStringLength;
+    extern __thread const char* t_threadName;
 
-    void cache_tid() ;
+    void cacheTid();
 
     inline int tid() {
         if (__builtin_expect(t_cachedTid == 0, 0)) {
-            cache_tid();
+            cacheTid();
         }
         return t_cachedTid;
     }
-} // namespace CurrentThread
 
+    inline const char* tidString() {
+        return t_tidString;
+    }
+
+    inline int tidStringLength() {
+        return t_tidStringLength;
+    }
+
+    inline const char* name() {
+        return t_threadName;
+    }
+
+    bool isMainThread();
+
+    void sleepUsec(int64_t usec);
+
+    std::string stackTrace(bool demangle);
+}
 
 
 #endif

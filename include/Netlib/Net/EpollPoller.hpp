@@ -1,6 +1,8 @@
 #ifndef EPOLLERPOLLER_H_
 #define EPOLLERPOLLER_H_
 
+// Epoll IO复用
+
 #include <sys/epoll.h>
 #include <vector>
 #include "Poller.hpp"
@@ -20,6 +22,7 @@ class EpollPoller : public Poller {
         void fill_active_channel(int events_num,ChannelList* active_channels) const;
         // 更新channel, 调用 epoll_ctl
         void update(int operation, Channel* channel);
+        static const char* operationToString(int op);
     private:
         static const int  k_init_eventlist_size = 16;
     private:

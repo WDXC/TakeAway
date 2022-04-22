@@ -7,19 +7,23 @@
 
 class SqlHandler {
 public:
-    explicit SqlHandler(std::unique_ptr<SqlConnPool> connpool);
-    SqlHandler(std::unique_ptr<SqlOps> sql, std::unique_ptr<SqlConnPool> connpool);
+    explicit SqlHandler(SqlConnPool* connpool);
+    SqlHandler(SqlOps** sql, SqlConnPool* connpool);
+    SqlHandler(SqlHandler* obj);
     ~SqlHandler();
 
-    bool dealInsert();
-    bool dealUpdate();
-    std::string dealQuery(const std::string& pwd);
-    bool dealDel();
+    // user table operator
+    bool userInsert(const std::string& mail, const std::string& pwd);
+    bool userUpdate(const std::string& mail, const std::string& pwd);
+    std::string userQuery(const std::string& pwd);
+    bool userDel(const std::string mail);
+
+    // admin table operator
 
 private:
-    std::unique_ptr<SqlOps> m_sql;
-    std::unique_ptr<SqlConnPool> m_connpool;
-    std::unique_ptr<SqlUserData> m_userdata;
+    SqlOps* m_sql;
+    SqlConnPool* m_connpool;
+    SqlUserData* m_userdata;
 };
 
 #endif //NETLIB_SQLHANDLER_H

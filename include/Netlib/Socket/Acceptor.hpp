@@ -1,6 +1,8 @@
 #ifndef ACCEPTOR_H_
 #define ACCEPTOR_H_
 
+// 主Reactor 连接 子Reactor的连接器
+
 #include "../Base/NonCopyable.hpp"
 #include "../Net/EventLoop.hpp"
 #include "../Net/Channel.hpp"
@@ -18,15 +20,18 @@ class Acceptor : NoCopyable {
         }
 
         void listen();
+				bool listening() const { return listening_; }
     
     private:
         void handleRead();
 
     private:
         EventLoop* m_loop;
+				bool listening_;
         Socket m_acceptSocket;
         Channel m_acceptChannel;
         NewConnectionCallback newConnectionCallback_;
+				int idleFd_;
 };
 
 

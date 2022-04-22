@@ -10,7 +10,7 @@
 
 class HttpDataHandle {
 public:
-    HttpDataHandle();
+    HttpDataHandle(SqlHandler& sql_handler);
     ~HttpDataHandle();
 
 public:
@@ -23,12 +23,11 @@ private:
 
     // 登陆数据处理
     void handleLogin(const std::string &type, Json::CJsonData& msg_Body);
+    void handleMail(const std::string& mail);
 
 
 private:
-
     std::unique_ptr<HttpCallback> obj;
-    std::unique_ptr<SqlConnPool> connpool_;
     std::unique_ptr<SqlHandler> sql_obj;
 };
 

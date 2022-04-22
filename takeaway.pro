@@ -26,7 +26,8 @@ HEADERS += \
          $$PWD/Sql/SqlUserData.hpp \
          $$PWD/Sql/SqlConnPool.hpp \
          $$PWD/Sql/SqlHandler.hpp \
-         $$PWD/Sql/SqlOps.hpp
+         $$PWD/Sql/SqlOps.hpp \
+         $$PWD/Email/MailSend.hpp
 
 
 SOURCES += \
@@ -40,7 +41,8 @@ SOURCES += \
         $$PWD/Sql/SqlUserData.cpp \
         $$PWD/Sql/SqlConnPool.cpp \
         $$PWD/Sql/SqlHandler.cpp \
-        $$PWD/Sql/SqlOps.cpp
+        $$PWD/Sql/SqlOps.cpp \
+        $$PWD/Email/MailSend.cpp
 
 
 LIBS += $$PWD/lib/libNet.a -lpthread -lmysqlclient

@@ -16,6 +16,11 @@ SqlOps::SqlOps() :
     sql_stmt = mysql_stmt_init(&sql_conn);
 }
 
+SqlOps::SqlOps(SqlOps *)
+{
+
+}
+
 SqlOps::~SqlOps()
 {
     free();
@@ -295,7 +300,8 @@ bool SqlOps::get_result()
 
 bool SqlOps::fetch_result()
 {
-    int status = mysql_stmt_fetch(sql_stmt);
+    int status = 0;
+    mysql_stmt_fetch(sql_stmt);
     if (status == 1 || status == MYSQL_NO_DATA) {
         return false;
     }

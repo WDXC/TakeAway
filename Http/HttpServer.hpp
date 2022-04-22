@@ -2,7 +2,7 @@
 #define HTTPSERVER_H_
 
 #include "TcpServer.hpp"
-#include "Sql/SqlHandler.hpp"
+#include <Sql/SqlHandler.hpp>
 
 class HttpRequest;
 class HttpResponse;
@@ -15,6 +15,7 @@ class HttpServer : NoCopyable {
         HttpServer(EventLoop* loop,
                    const InetAddress& listAddr,
                    const std::string& name,
+                   SqlHandler &obj,
                    TcpServer::Option option = TcpServer::k_reuse_port);
 
         void setHttpCallback(const HttpCallback& cb) {
@@ -26,7 +27,7 @@ class HttpServer : NoCopyable {
         }
 
         void start();
-        
+
     private:
         void onConnection(const TcpConnectionPtr& conn);
         void onMessage(const TcpConnectionPtr& conn, Buffer* buf, TimeStamp receive);
@@ -34,6 +35,7 @@ class HttpServer : NoCopyable {
 
     private:
         TcpServer server_;
+        SqlHandler sql_obj;
         HttpCallback httpCallback_;
 };
 

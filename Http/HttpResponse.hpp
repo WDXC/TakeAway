@@ -18,10 +18,10 @@ class HttpResponse  {
             k404NotFound = 404,
         };
 
-        explicit HttpResponse(bool close) :
+        explicit HttpResponse(bool close, SqlHandler& conn) :
             statusCode_(kUnknown),
             closeConnection_(close),
-            obj(new HttpDataHandle()){
+            obj(conn){
         }
 
         void setStatusCode(HttpStatusCode code) {
@@ -53,7 +53,7 @@ class HttpResponse  {
         }
 
         std::string dealData(Json::CJsonData& json_data) {
-            obj->messageProc(json_data);
+            obj.messageProc(json_data);
             std::string res;
             json_data.EncodeJson(res);
             return res;
@@ -67,8 +67,7 @@ class HttpResponse  {
         std::string statusMessage_;
         bool closeConnection_;
         std::string body_;
-        std::unique_ptr<HttpDataHandle> obj;
-
+        HttpDataHandle obj;
 };
 
 

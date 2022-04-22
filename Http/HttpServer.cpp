@@ -10,9 +10,10 @@ void defaultHttpCallback(const HttpRequest&, HttpResponse* resp) {
 
 HttpServer::HttpServer(EventLoop* loop,
                        const InetAddress& listAddr,
-                       const std::string& name,
+                       const std::string& name, SqlHandler &obj,
                        TcpServer::Option option ) :
     server_(loop, listAddr, name, option),
+    sql_obj(obj),
     httpCallback_(defaultHttpCallback) {
     server_.setConnectionCallback(std::bind(
         &HttpServer::onConnection, this, std::placeholders::_1));
@@ -51,7 +52,7 @@ void HttpServer::onRequest (const TcpConnectionPtr& conn, const HttpRequest& req
     const std::string& connection = req.getHeader("Connection");
     bool close = connection == "close" ||
                 (req.getVersion() == HttpRequest::kHttp10 && connection != "Keep-Alive");
-    HttpResponse response(close);
+    HttpResponse response(close, sql_obj);
     httpCallback_(req, &response);
     Buffer buf;
     response.appendToBuffer(&buf);

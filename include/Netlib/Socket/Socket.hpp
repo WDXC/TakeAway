@@ -1,6 +1,7 @@
 #ifndef SOCKET_H_
 #define SOCKET_H_ 
 
+// 对于SocketOps的RAII封装
 
 #include "../Base/NonCopyable.hpp"
 
@@ -9,6 +10,7 @@ class InetAddress;
 class Socket : NoCopyable {
     public:
         explicit Socket(int fd);
+        ~Socket();
         int fd() const {return m_sockfd;}
 
         void bindAddress(const InetAddress& addr) const;
@@ -27,7 +29,7 @@ class Socket : NoCopyable {
         // 保持长连接
         void set_keepAlive(bool on) const ;
     private:
-        int m_sockfd;
+        const int m_sockfd;
 };
 
 
