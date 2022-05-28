@@ -14,7 +14,7 @@ INCLUDEPATH += \
                $$PWD/include/Netlib/rapidjson \
                $$PWD/include/Netlib/Socket \
                $$PWD/include/Netlib/Thread \
-               $$PWD/include/Netlib/Timer
+               $$PWD/include/Netlib/Timer \
 
 HEADERS += \
          $$PWD/Http/HttpRequest.hpp \
@@ -27,12 +27,15 @@ HEADERS += \
          $$PWD/Sql/SqlConnPool.hpp \
          $$PWD/Sql/SqlHandler.hpp \
          $$PWD/Sql/SqlOps.hpp \
-         $$PWD/Email/MailSend.hpp
+         $$PWD/Sql/SqlMerchant.hpp \
+         $$PWD/Sql/SqlGoods.hpp \
+         $$PWD/Email/MailSend.hpp\
 
 
 SOURCES += \
         sql_main.cpp \
         http_main.cpp \
+        $$PWD/Email/MailSend.cpp \
         $$PWD/Http/HttpContext.cpp \
         $$PWD/Http/HttpResponse.cpp \
         $$PWD/Http/HttpServer.cpp \
@@ -42,10 +45,10 @@ SOURCES += \
         $$PWD/Sql/SqlConnPool.cpp \
         $$PWD/Sql/SqlHandler.cpp \
         $$PWD/Sql/SqlOps.cpp \
-        $$PWD/Email/MailSend.cpp
+        $$PWD/Sql/SqlMerchant.cpp
 
 
-LIBS += $$PWD/lib/libNet.a -lpthread -lmysqlclient
+LIBS += $$PWD/lib/libNet.a  -lpthread -lmysqlclient
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

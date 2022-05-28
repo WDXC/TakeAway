@@ -11,6 +11,7 @@ HttpCallback::~HttpCallback() {
 void HttpCallback::init() {
     maptable["loginform"] = LOGIN_;
     maptable["mail"] = MAIL_;
+    maptable["test"] = TEST_;
 }
 
 void HttpCallback::HandleKeyWord(std::string &type, Json::CJsonData & msg_Body) {
@@ -31,4 +32,8 @@ void HttpCallback::setLoginCallback(const Task &cb)
 void HttpCallback::setMailCallback(const Task &cb)
 {
     MAIL_ = cb;
+}
+
+void HttpCallback::setTestCallback(const Task &cb) {
+    TEST_ = cb;
 }

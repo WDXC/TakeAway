@@ -84,7 +84,7 @@ bool HttpContext::parseRequest(Buffer* m_buf, TimeStamp recetime) {
     } else if (contextState_ == kExpectBody) {
       if (!request_.setRequestBody(m_buf->peek())) {
             std::string res = m_buf->peek();
-        hasMore = false;
+            hasMore = false;
       } else {
         std::string str = m_buf->peek();
         m_buf->retrieveUntil(m_buf->peek() + str.size());

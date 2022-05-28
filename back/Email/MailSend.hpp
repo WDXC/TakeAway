@@ -17,7 +17,7 @@ public:
 
 public:
     bool init();
-    bool SendVerificationCode(std::string &mail, std::string code);
+    bool SendVerificationCode(const std::string& mail, std::string code);
     bool handleSend(std::string& mail, std::string& code);
 
 private:
@@ -30,6 +30,7 @@ private:
     int cli_sock;
     char message[BUFSIZE];
     struct sockaddr_in cli_addr;
+    std::map<std::string, std::string> codeMap;
 };
 
 using g_mail = Singleton<MailSend>;

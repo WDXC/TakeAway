@@ -1,4 +1,5 @@
 #include <string.h>
+#include <string>
 #include <iostream>
 #include <map>
 #include "Http/HttpServer.hpp"
@@ -14,9 +15,19 @@ using namespace std;
 
 bool benchmark = false;
 
+void setHeader(HttpResponse* resp) {
+    resp->setStatusCode(HttpResponse::k200Ok);
+    resp->setContentType("*/*");
+    resp->addHeader("Server", "Zty");
+    resp->addHeader("Access-Control-Allow-Origin", "*");
+    resp->addHeader("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
+    resp->addHeader("Cache-Control", "no-cache");
+    resp->addHeader("Access-Control-Allow-Methods", "*");}
+
 void onRequest(const HttpRequest& req, HttpResponse* resp) {
     std::cout << "Headers " << req.methodString() << " " << req.GetPath()
               << std::endl;
+    std::string path = req.methodString();
 
     if (!benchmark)
     {
@@ -26,47 +37,38 @@ void onRequest(const HttpRequest& req, HttpResponse* resp) {
             std::cout << header.first << ": " << header.second << std::endl;
         }
     }
+
     if (req.GetPath() == "/") {
-        resp->setStatusCode(HttpResponse::k200Ok);
-        resp->addHeader("Server", "Zty");
-//        resp->addHeader("Access-Control-Allow-Origin", "*");
-//        resp->addHeader("Access-Control-Allow-Headers", "Content-Type");
-//        resp->addHeader("Cache-Control", "no-cache");
-        resp->setContentType("*/*");
-    } else if (req.GetPath() == "/api") {
-        resp->setStatusCode(HttpResponse::k200Ok);
-        resp->setContentType("*/*");
-        resp->addHeader("Server", "Zty");
-        resp->addHeader("Access-Control-Allow-Origin", "*");
-        resp->addHeader("Access-Control-Allow-Headers", "Content-Type");
-        resp->addHeader("Cache-Control", "no-cache");
-        // 回显 json数据
+        setHeader(resp);
+    } else if (req.GetPath() == "/userlogin") {
+        setHeader(resp);
         Json::CJsonData val = req.getRequestBody();
-        resp->setBody(resp->dealData(val));
-
-        // useFetch连通性测试
-//        Json::CJsonData root;
-//        root.PushValue("title", "succesfully");
-//        root.PushValue("body", "hhuj");
-//        Json::CJsonData res;
-//        res.PushValue(root);
-//        std::string strData;
-//        res.EncodeArryJson(strData);
-//        resp->setBody(strData);
-    } else if (req.GetPath() == "/register") {
-        resp->setStatusCode(HttpResponse::k200Ok);
-        resp->setContentType("*/*");
-        resp->addHeader("Server", "Zty");
-        resp->addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
-        resp->addHeader("Cache-Control", "no-cache");
-        resp->addHeader("Access-Control-Allow-Headers", "Content-Type");
-
-        Json::CJsonData root;
-        root.PushValue("type", "register");
-        root.PushValue("body", "hello world");
-        std::string strData;
-        root.EncodeJson(strData);
-        resp->setBody(strData);
+        resp->setBody(resp->dealData(val, path));
+        return;
+    } else if (req.GetPath() == "/usermail") {
+        setHeader(resp);
+        Json::CJsonData val = req.getRequestBody();
+        resp->setBody(resp->dealData(val, path));
+        return;
+    } else if (req.GetPath() == "/usersignup") {
+        setHeader(resp);
+        Json::CJsonData val = req.getRequestBody();
+        resp->setBody(resp->dealData(val, path));
+        return;
+    } else if (req.GetPath() == "/merchantlogin") {
+        setHeader(resp);
+        Json::CJsonData val = req.getRequestBody();
+        resp->setBody(resp->dealData(val, path));
+        return;
+    } else if (req.GetPath() == "/merchatregister") {
+        setHeader(resp);
+        Json::CJsonData val = req.getRequestBody();
+        resp->setBody(resp->dealData(val, path));
+    } else if (req.GetPath() == "/merchantregister") {
+        setHeader(resp);
+        Json::CJsonData val = req.getRequestBody();
+        resp->setBody(resp->dealData(val, path));
+        return;
     }
 }
 

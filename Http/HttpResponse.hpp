@@ -52,13 +52,9 @@ class HttpResponse  {
             body_ = body;
         }
 
-        std::string dealData(Json::CJsonData& json_data) {
-            obj.messageProc(json_data);
-            std::string res;
-            json_data.EncodeJson(res);
-            return res;
+        std::string dealData(Json::CJsonData& json_data, std::string& method) {
+            return obj.messageProc(json_data, method);
         }
-
         void appendToBuffer(Buffer* output) const ;
 
     private:

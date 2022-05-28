@@ -8,7 +8,8 @@
 
 MailSend::MailSend()
     : cli_sock(0),
-    cli_addr()
+    cli_addr(),
+    codeMap()
 {
 
 }
@@ -29,7 +30,7 @@ bool MailSend::init()
         return false;
     }
     int on = 1;
-    memset(&cli_addr, 0x0, sizeof(cli_addr));
+    memset(&cli_sock, 0x0, sizeof(cli_addr));
     cli_addr.sin_family = AF_INET;
     cli_addr.sin_port = htons(port);
     inet_pton(AF_INET, hostIp.c_str(), &cli_addr.sin_addr);
@@ -43,9 +44,9 @@ bool MailSend::init()
     return true;
 }
 
-bool MailSend::SendVerificationCode(std::string &mail, std::string code)
+bool MailSend::SendVerificationCode(const std::string &mail, std::string code)
 {
-    sendMsg("helo qq.com\r\n");
+    sendMsg("HELO qq.com\r\n");
     recvMsg();
     // 验证登陆
     sendMsg("auth login\r\n");
@@ -55,7 +56,7 @@ bool MailSend::SendVerificationCode(std::string &mail, std::string code)
     sendMsg("\r\n");
     recvMsg();
     // 密码(bash64编码)
-    sendMsg("Y2VjZ25rcGJxanB5Z2NqaQ==");
+    sendMsg("aHFzbGJyb2V2bm5rYmFhYQ==");
     sendMsg("\r\n");
     recvMsg();
 
@@ -88,14 +89,18 @@ bool MailSend::SendVerificationCode(std::string &mail, std::string code)
     return true;
 }
 
+bool MailSend::handleSend(std::string &mail, std::string &code) {
+    init();
+    return SendVerificationCode(mail, code);
+}
+
 bool MailSend::sendMsg(const char *msg)
 {
-    int ret = 0;
-    ret = send(cli_sock, msg, strlen(msg), 0);
-    if (ret == -1) {
+    int ret = send(cli_sock, &message, strlen(message), 0);
+    if (ret < 0) {
         return false;
     }
-    memset(message, 0x00, BUFSIZE);
+    memset(&message, 0x0, BUFSIZE);
     return true;
 }
 

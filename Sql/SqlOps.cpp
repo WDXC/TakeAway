@@ -298,15 +298,19 @@ bool SqlOps::get_result()
     return true;
 }
 
+
 bool SqlOps::fetch_result()
 {
-    int status = 0;
-    mysql_stmt_fetch(sql_stmt);
-    if (status == 1 || status == MYSQL_NO_DATA) {
+    if (!mysql_stmt_fetch(sql_stmt))
+    {
         return false;
     }
-    return true;
+    else
+    {
+        return true;
+    }
 }
+
 
 void SqlOps::free()
 {

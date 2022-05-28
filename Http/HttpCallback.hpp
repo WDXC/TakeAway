@@ -25,10 +25,13 @@ public:
     // 发送验证码邮件
     void setMailCallback(const Task& cb);
 
+    // 测试接口
+    void setTestCallback(const Task& cb);
 
 private:
     Task LOGIN_;
     Task MAIL_;
+    Task TEST_;
     std::map<std::string, Task> maptable;
 };
 
